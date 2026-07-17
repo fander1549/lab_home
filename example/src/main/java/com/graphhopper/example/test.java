@@ -8,6 +8,14 @@ import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
 
 import java.io.BufferedWriter;
 import java.io.BufferedOutputStream;
@@ -26,6 +34,7 @@ import com.graphhopper.util.*;
 import com.graphhopper.util.shapes.GHPoint;
 
 import java.io.FileNotFoundException;
+import java.time.format.DateTimeParseException;
 import java.util.Locale;
 
 import static com.graphhopper.json.Statement.If;
@@ -53,7 +62,7 @@ import java.io.IOException;
         int count=0;
         //执行路径规划操作
         //String csvFile = "/Users/rfande/Downloads/graphhopper-master/example/src/main/java/com/graphhopper/example/2014_yellow_10.csv";
-        String filePath = "2014_yellow_10.csv_time33.txt";
+     /*   String filePath = "2014_yellow_10.csv_time33.txt";
         //FileReader fr = new FileReader(csvFile);
        // CSVReader reader = new CSVReader(fr);
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
@@ -66,9 +75,44 @@ import java.io.IOException;
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println(count);
+        System.out.println(count);*/
 
-        }}
+            String inputFilePath = "/Users/rfande/Downloads/Divvy_Trips_20240703.csv";
+            String outputFilePath = "/Users/rfande/PycharmProjects/STGAN/chicago/bike_in_out";
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy h:mm:ss a", Locale.ENGLISH);
+
+            LocalDateTime baseTimestamp = LocalDateTime.parse("01/01/2019 11:00:00 AM", formatter);
+            LocalDateTime lastTimestamp = LocalDateTime.parse("01/01/2020 11:00:00 AM", formatter);
+
+        try (BufferedReader br = new BufferedReader(new FileReader(inputFilePath));
+             CSVReader reader = new CSVReader(br);
+             CSVWriter writer = new CSVWriter(new FileWriter(outputFilePath))) {
+
+            String[] nextLine;
+            // Skip header
+            reader.readNext();
+           // int count = 0;
+
+            while ((nextLine = reader.readNext()) != null) {
+                try{LocalDateTime startTime = LocalDateTime.parse(nextLine[1], formatter);
+                LocalDateTime endTime = LocalDateTime.parse(nextLine[2], formatter);
+                if ((startTime.isEqual(baseTimestamp) || startTime.isAfter(baseTimestamp)) &&
+                        (startTime.isEqual(lastTimestamp) || startTime.isBefore(lastTimestamp))) {
+                    writer.writeNext(nextLine);
+                    System.out.println(nextLine[1]);
+                }}
+                catch (ArrayIndexOutOfBoundsException e){
+                    System.err.println("Error parsing date: " + nextLine[0]);
+
+                }
+                count++;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        }
+    }
         /*System.out.println(count);
         System.out.println(count2);
         System.out.println(i);
