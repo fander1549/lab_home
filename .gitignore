@@ -56,3 +56,8 @@ package-lock.json
 
 # Large local trip datasets used as inputs
 /example/src/main/java/com/graphhopper/example/*.csv
+
+# IRV experiment artifacts and Python caches
+/outputs/irv_perturbation/
+**/__pycache__/
+*.py[cod]
