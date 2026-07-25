@@ -11,15 +11,17 @@ IRV 采用匀速假设：
 
 `IRV(r) = Σ duration × segment_length / path_length / 1800`。
 
-## 输入与依赖
+## 已上传的数据与依赖
 
-- NYC 路径源文件和 `data_processing_c#` 工程中的 `NYC_862.txt`。
-- Chicago trip 文件和 Community Areas GeoJSON。
+- 可直接复核的逐路径结果、区域统计、汇总表和图片位于 `artifacts/results/`。
+- NYC 的 `NYC_862.txt` 和 Chicago Community Areas GeoJSON 位于
+  `artifacts/boundaries/`。
+- 若要从原始行程重新生成路径，仍需 NYC 路径源文件和 Chicago trip 文件。
 - `NewYork2.osm.pbf`、`Chicago.osm.pbf`。
 - Python：`numpy`、`matplotlib`、`geopandas`、`shapely`。
 - Chicago 路网解释可选依赖：GDAL/OGR。
 
-脚本不包含个人目录的默认数据路径；区域文件必须显式传入。
+仓库中的边界文件可以直接传给绘图脚本，不依赖个人目录。
 
 ## 1. 生成全日 CH 与严格次优路径
 
@@ -67,15 +69,15 @@ NYC 映射移植自 `data_processing_c#/Tool.cs`：2400×2400 Web-Mercator 网�
 # NYC
 python3 experiments/irv_perturbation/render_full_day_irv_perturbation.py \
   --city nyc \
-  --nyc-routes outputs/irv_perturbation/strict_second_best/nyc_routes.jsonl \
-  --nyc-grid /path/to/data_processing_c#/NYC_862.txt \
+  --nyc-routes experiments/irv_perturbation/artifacts/results/routes/nyc_2014-02-01.jsonl \
+  --nyc-grid experiments/irv_perturbation/artifacts/boundaries/NYC_862.txt \
   --output-dir outputs/irv_perturbation/strict_second_best/final
 
 # Chicago
 python3 experiments/irv_perturbation/render_full_day_irv_perturbation.py \
   --city chicago \
-  --chicago-routes outputs/irv_perturbation/strict_second_best/chicago_routes.jsonl \
-  --chicago-boundary /path/to/chicago_community_areas.geojson \
+  --chicago-routes experiments/irv_perturbation/artifacts/results/routes/chicago_2019-01-01.jsonl \
+  --chicago-boundary experiments/irv_perturbation/artifacts/boundaries/chicago_community_areas.geojson \
   --output-dir outputs/irv_perturbation/strict_second_best/final
 ```
 
@@ -95,13 +97,14 @@ ogr2ogr -f GeoJSON /tmp/chicago-major-roads.geojson Chicago.osm.pbf lines \
 
 ```bash
 python3 experiments/irv_perturbation/analyze_chicago_red_corridor.py \
-  --routes outputs/irv_perturbation/strict_second_best/chicago_routes.jsonl \
-  --boundaries /path/to/chicago_community_areas.geojson \
+  --routes experiments/irv_perturbation/artifacts/results/routes/chicago_2019-01-01.jsonl \
+  --boundaries experiments/irv_perturbation/artifacts/boundaries/chicago_community_areas.geojson \
   --roads /tmp/chicago-major-roads.geojson \
   --output-dir outputs/irv_perturbation/strict_second_best/final \
   --selected-paths 4972 \
   --target-region 28
 ```
 
-该分析输出目标区域的重路由走廊图、主干道路增量统计和来源区域统计。所有本地数据、
-路径 JSONL、CSV 和图片均写入 `outputs/irv_perturbation/`，该目录不会提交到 Git。
+该分析输出目标区域的重路由走廊图、主干道路增量统计和来源区域统计。重新运行产生的
+临时文件仍写入不会提交的 `outputs/irv_perturbation/`；本次实验的固定结果快照和边界
+数据已单独整理到 `artifacts/` 并提交。

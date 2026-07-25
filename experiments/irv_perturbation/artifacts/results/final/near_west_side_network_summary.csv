@@ -1,0 +1,17 @@
+kind,name,region_id,irv_units
+donor_region,WEST TOWN,24,31.867907811308868
+donor_region,LOOP,32,10.588961217721623
+donor_region,NEAR NORTH SIDE,8,10.186678663054366
+donor_region,LOGAN SQUARE,22,3.3193391666155034
+donor_region,ARMOUR SQUARE,34,3.0773623271899004
+donor_region,LOWER WEST SIDE,31,3.055231075772296
+donor_region,NEAR SOUTH SIDE,33,2.96830951059976
+donor_region,BRIDGEPORT,60,2.5776023742627623
+alternative_road_in_near_west_side,Eisenhower Expressway,28,21.042446156326257
+alternative_road_in_near_west_side,North Damen Avenue,28,11.100305840229092
+alternative_road_in_near_west_side,West Randolph Street,28,10.763828536009914
+alternative_road_in_near_west_side,South Damen Avenue,28,9.149496444965495
+alternative_road_in_near_west_side,West Van Buren Street,28,5.788838332402294
+alternative_road_in_near_west_side,North Halsted Street,28,5.308197265942902
+alternative_road_in_near_west_side,West Lake Street,28,4.893331660650363
+alternative_road_in_near_west_side,West Washington Boulevard,28,3.704018802945174
